@@ -1,18 +1,18 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Common;
+using System.ComponentModel.DataAnnotations;
 
-public class Order
+namespace Domain.Entities;
+
+public class Order : BaseAuditableEntity
 {
-    public Order()
-    {
-        Customer = new Customer();
-    }
-
-    public int OrderId { get; set; }
+    [Required]
     public DateTime OrderDate { get; set; }
+
+    [Required]
     public decimal TotalPrice { get; set; }
 
     public int CustomerId { get; set; }
     public Customer Customer { get; set; }
 
-    public ICollection<Item> Items { get; set; } = new List<Item>();
+    public List<Item> OrderItems { get; set; } = new List<Item>();
 }

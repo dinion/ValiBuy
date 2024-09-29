@@ -14,19 +14,19 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Customer>()
-            .HasMany(c => c.Orders)
-            .WithOne(o => o.Customer)
+        modelBuilder.Entity<Order>()
+            .HasOne(o => o.Customer)
+            .WithMany(c => c.Orders)
             .HasForeignKey(o => o.CustomerId);
 
-        modelBuilder.Entity<Order>()
-            .HasMany(o => o.Items)
-            .WithOne(i => i.Order)
+        modelBuilder.Entity<Item>()
+            .HasOne(i => i.Order)
+            .WithMany(o => o.OrderItems)
             .HasForeignKey(i => i.OrderId);
 
         modelBuilder.Entity<Item>()
             .HasOne(i => i.Product)
-            .WithMany(p => p.Items)
+            .WithMany(p => p.OrderItems)
             .HasForeignKey(i => i.ProductId);
     }
 }

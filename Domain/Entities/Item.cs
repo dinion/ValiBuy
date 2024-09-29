@@ -1,21 +1,16 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Common;
+using System.ComponentModel.DataAnnotations;
 
-public class Item
+namespace Domain.Entities;
+
+public class Item : BaseAuditableEntity
 {
-    public Item()
-    {
-        Order = new Order();
-        Product = new Product();
-    }
-
-    public int ItemId { get; set; }
-    public int Quantity { get; set; }
-
     public int OrderId { get; set; }
     public Order Order { get; set; }
 
     public int ProductId { get; set; }
     public Product Product { get; set; }
 
-    public decimal TotalPrice => Quantity * Product.Price;
+    [Required]
+    public int Quantity { get; set; }
 }
