@@ -1,13 +1,14 @@
 ﻿using Application.Common.Interfaces;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly DbContext _context;
+        public readonly ApplicationDbContext _context;
 
-        public Repository(DbContext context)
+        public Repository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -17,9 +18,16 @@ namespace Infrastructure.Repositories
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        public async Task<IReadOnlyList<T>> GetAllAsync(Func<IQueryable<T>, IQueryable<T>>? query = null)
         {
-            return await _context.Set<T>().ToListAsync();
+            IQueryable<T> queryable = _context.Set<T>();
+
+            if (query != null)
+            {
+                queryable = query(queryable);
+            }
+
+            return await queryable.ToListAsync();
         }
 
         public async Task AddAsync(T entity)
@@ -34,9 +42,15 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(T entity)
+        public async Task RemoveAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveRange(IEnumerable<T> entities, CancellationToken cancellationToken)
+        {
+            _context.RemoveRange(entities);
             await _context.SaveChangesAsync();
         }
     }

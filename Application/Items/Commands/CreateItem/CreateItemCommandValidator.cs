@@ -6,6 +6,6 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
 {
     public CreateItemCommandValidator()
     {
-        //RuleFor
+        
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Domain.Common;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
+[Table("Item")]
 public class Item : BaseAuditableEntity
 {
     public int OrderId { get; set; }

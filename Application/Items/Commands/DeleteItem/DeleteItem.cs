@@ -22,6 +22,6 @@ public class DeleteTodoItemCommandHandler : IRequestHandler<DeleteItemCommand>
 
         Guard.Against.NotFound(request.itemId, entity);
 
-        await _unitOfWork.Items.DeleteAsync(entity);
+        await _unitOfWork.Items.RemoveAsync(entity);
     }
 }

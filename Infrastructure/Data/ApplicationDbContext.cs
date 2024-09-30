@@ -1,10 +1,13 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Infrastructure.Data;
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<Item> Items => Set<Item>();
@@ -12,7 +15,17 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Customer>()
+            .HasKey(x => x.Id);
+
+        modelBuilder.Entity<Order>()
+            .HasKey(x => x.Id);
+
+        modelBuilder.Entity<Item>()
+            .HasKey(x => x.Id);
+
+        modelBuilder.Entity<Product>()
+            .HasKey(x => x.Id);
 
         modelBuilder.Entity<Order>()
             .HasOne(o => o.Customer)
@@ -28,5 +41,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             .HasOne(i => i.Product)
             .WithMany(p => p.OrderItems)
             .HasForeignKey(i => i.ProductId);
+
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

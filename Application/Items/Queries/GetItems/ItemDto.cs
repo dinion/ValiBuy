@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-
-namespace Application.Items.Queries.GetItems
+﻿namespace Application.Items.Queries.GetItems
 {
     public class ItemDto
     {
-        private class Mapping : Profile
-        {
-            public Mapping() { }
-        }
+        public int ItemId { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 ﻿using Domain.Common;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
+[Table("Order")]
 public class Order : BaseAuditableEntity
 {
-    [Required]
     public DateTime OrderDate { get; set; }
 
-    [Required]
     public decimal TotalPrice { get; set; }
 
     public int CustomerId { get; set; }

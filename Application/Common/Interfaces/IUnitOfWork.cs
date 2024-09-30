@@ -7,7 +7,7 @@ namespace Application.Common.Interfaces
         IRepository<Customer> Customers { get; }
         IRepository<Order> Orders { get; }
         IRepository<Item> Items { get; }
-        IRepository<Product> Products { get; }
+        IProductRepository Products { get; }
 
         Task<int> CompleteAsync();
     }

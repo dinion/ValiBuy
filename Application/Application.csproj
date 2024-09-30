@@ -18,9 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Customers\Queries\GetCustomersWithPagination\" />
-    <Folder Include="Customers\Queries\GetCustomerById\" />
-    <Folder Include="Orders\Queries\GetOrders\" />
     <Folder Include="Orders\Queries\GetOrderById\" />
     <Folder Include="Products\Queries\GetProduct\" />
     <Folder Include="Products\Queries\GetProducts\" />
