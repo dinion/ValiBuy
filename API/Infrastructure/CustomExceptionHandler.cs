@@ -4,19 +4,32 @@ using Microsoft.AspNetCore.Diagnostics;
 
 namespace API.Infrastructure;
 
+/// <summary>
+/// Custom exception handler for managing specific application exceptions.
+/// </summary>
 public class CustomExceptionHandler : IExceptionHandler
 {
     private readonly Dictionary<Type, Func<HttpContext, Exception, Task>> _exceptionHandlers;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomExceptionHandler"/> class.
+    /// </summary>
     public CustomExceptionHandler()
     {
         _exceptionHandlers = new()
-            {
-                { typeof(ValidationException), HandleValidationException },
-                { typeof(NotFoundException), HandleNotFoundException },
-            };
+        {
+            { typeof(ValidationException), HandleValidationException },
+            { typeof(NotFoundException), HandleNotFoundException },
+        };
     }
 
+    /// <summary>
+    /// Attempts to handle an exception asynchronously.
+    /// </summary>
+    /// <param name="httpContext">The current HTTP context.</param>
+    /// <param name="exception">The exception to handle.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>A <see cref="ValueTask{TResult}"/> that returns true if the exception was handled, false otherwise.</returns>
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         var exceptionType = exception.GetType();
@@ -30,6 +43,12 @@ public class CustomExceptionHandler : IExceptionHandler
         return false;
     }
 
+    /// <summary>
+    /// Handles a <see cref="ValidationException"/> by returning a 400 Bad Request response with validation details.
+    /// </summary>
+    /// <param name="httpContext">The current HTTP context.</param>
+    /// <param name="ex">The exception being handled.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     private async Task HandleValidationException(HttpContext httpContext, Exception ex)
     {
         var exception = (ValidationException)ex;
@@ -43,6 +62,12 @@ public class CustomExceptionHandler : IExceptionHandler
         });
     }
 
+    /// <summary>
+    /// Handles a <see cref="NotFoundException"/> by returning a 404 Not Found response with error details.
+    /// </summary>
+    /// <param name="httpContext">The current HTTP context.</param>
+    /// <param name="ex">The exception being handled.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     private async Task HandleNotFoundException(HttpContext httpContext, Exception ex)
     {
         var exception = (NotFoundException)ex;

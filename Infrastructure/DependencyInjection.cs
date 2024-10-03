@@ -9,6 +9,12 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
+    /// <summary>
+    /// IServiceCollection extension method, to add specific Infrastructure layer services.
+    /// </summary>
+    /// <param name="services">The service collection to which the services are added.</param>
+    /// <param name="configuration">Application configuration</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");

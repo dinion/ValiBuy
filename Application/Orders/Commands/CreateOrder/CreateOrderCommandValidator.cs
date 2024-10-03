@@ -1,7 +1,13 @@
 ﻿namespace Application.Orders.Commands.CreateOrder;
 
+/// <summary>
+/// Validator for <see cref="CreateOrderCommand"/>.
+/// </summary>
 public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CreateOrderCommandValidator"/> class.
+    /// </summary>
     public CreateOrderCommandValidator()
     {
         RuleFor(x => x.CustomerId)

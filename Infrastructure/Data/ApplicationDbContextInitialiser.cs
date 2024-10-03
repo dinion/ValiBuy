@@ -8,8 +8,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data;
 
+/// <summary>
+/// Provides extension methods for initializing the database in a web application.
+/// </summary>
 public static class InitialiserExtensions
 {
+    /// <summary>
+    /// Initializes the database asynchronously.
+    /// </summary>
+    /// <param name="app">The web application instance.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public static async Task InitialiseDatabaseAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
@@ -17,11 +25,12 @@ public static class InitialiserExtensions
         var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
 
         await initialiser.InitialiseAsync();
-
-        //await initialiser.SeedAsync();
     }
 }
 
+/// <summary>
+/// Class responsible for initializing the application database context.
+/// </summary>
 public class ApplicationDbContextInitialiser
 {
     private readonly ILogger<ApplicationDbContextInitialiser> _logger;
@@ -33,6 +42,11 @@ public class ApplicationDbContextInitialiser
         _context = context;
     }
 
+    /// <summary>
+    /// Initializes the database asynchronously by applying any pending migrations.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    /// <exception cref="Exception">Throws an exception if an error occurs during database initialization.</exception>
     public async Task InitialiseAsync()
     {
         try
@@ -44,40 +58,5 @@ public class ApplicationDbContextInitialiser
             _logger.LogError(ex, "An error occurred while initialising the database.");
             throw;
         }
-    }
-
-    public async Task SeedAsync()
-    {
-        try
-        {
-            await TrySeedAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while seeding the database.");
-            throw;
-        }
-    }
-
-    public async Task TrySeedAsync()
-    {
-        // Default data
-        // Seed, if necessary
-        //if (!_context.TodoLists.Any())
-        //{
-        //    _context.TodoLists.Add(new TodoList
-        //    {
-        //        Title = "Todo List",
-        //        Items =
-        //        {
-        //            new TodoItem { Title = "Make a todo list 📃" },
-        //            new TodoItem { Title = "Check off the first item ✅" },
-        //            new TodoItem { Title = "Realise you've already done two things on the list! 🤯"},
-        //            new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
-        //        }
-        //    });
-
-        //    await _context.SaveChangesAsync();
-        //}
     }
 }

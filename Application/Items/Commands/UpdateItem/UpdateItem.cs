@@ -1,30 +1,48 @@
 ﻿using Application.Common.Interfaces;
-using Ardalis.GuardClauses;
-using MediatR;
 
-namespace Application.Items.Commands.CreateItem;
-
-public record UpdateItemCommand : IRequest
+namespace Application.Items.Commands.CreateItem
 {
-    public int ItemId { get; set; }
-}
-
-public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
-{
-    private readonly IUnitOfWork _unitOfWork;
-
-    public UpdateItemCommandHandler(IUnitOfWork unitOfWork)
+    /// <summary>
+    /// Represents a command to update an item by its ID.
+    /// </summary>
+    public record UpdateItemCommand : IRequest
     {
-        _unitOfWork = unitOfWork;
+        /// <summary>
+        /// Gets or sets the ID of the item to be updated.
+        /// </summary>
+        public int ItemId { get; set; }
     }
 
-    public async Task Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+    /// <summary>
+    /// Handler for the <see cref="UpdateItemCommand"/>.
+    /// </summary>
+    public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
     {
-        var entity = await _unitOfWork.Items
-            .GetByIdAsync(request.ItemId, cancellationToken);
+        private readonly IUnitOfWork _unitOfWork;
 
-        Guard.Against.NotFound(request.ItemId, entity);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateItemCommandHandler"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work for data access.</param>
+        public UpdateItemCommandHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
 
-        await _unitOfWork.CompleteAsync();
+        /// <summary>
+        /// Handles the update of an item by its ID.
+        /// </summary>
+        /// <param name="request">The request containing the ID of the item to be updated.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        public async Task Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+        {
+            var entity = await _unitOfWork.Items
+                .GetByIdAsync(request.ItemId, cancellationToken);
+
+            Guard.Against.NotFound(request.ItemId, entity);
+
+            await _unitOfWork.CompleteAsync();
+        }
     }
 }

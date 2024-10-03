@@ -4,8 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Infrastructure.Data;
+
+/// <summary>
+/// Represents the application database context for managing database entities.
+/// </summary>
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
+    /// </summary>
+    /// <param name="options">The options for configuring the context.</param>
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<Customer> Customers => Set<Customer>();
